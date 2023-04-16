@@ -1,8 +1,5 @@
-def capital_case(x):
-    return x.capitalize()
+from src.ml_botting_core.universal_predictor import universal_predictor
 
-def test_capital_case():
-    assert capital_case('semaphore') == 'Semaphore'
-
-def test_capital_case2():
-    assert capital_case('ryan') == 'Ryan'
+def test_1():
+    up = universal_predictor()
+    assert up.load_models() == 0, "not 0"
