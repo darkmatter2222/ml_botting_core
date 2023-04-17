@@ -18,6 +18,10 @@ def test_missing_config():
 
 
 def test_download_model():
-    config = json.loads(open("tests\\test_model_config.json").read())
+    #config = json.loads(open("tests\\test_model_config.json").read())
+    config = json.loads(open("test_model_config.json").read())
     up = universal_predictor(config=config)
     up.load_models()
+
+
+test_download_model()

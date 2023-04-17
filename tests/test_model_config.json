@@ -11,6 +11,7 @@
    "private_models":[
       {
          "game":"eve_online",
+         "model_name":"game_state",
          "model_root_directory":"O:\\eve_live_models\\game_state"
       }
    ]
