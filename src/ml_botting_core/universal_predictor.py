@@ -1,5 +1,5 @@
 from src.ml_botting_core.model_management.download_models import download_model
-from src.ml_botting_core.model_management.model_manager import process_model_config
+from src.ml_botting_core.model_management.model_manager import load_models_from_config
 from loguru import logger
 
 class universal_predictor:
@@ -29,6 +29,6 @@ class universal_predictor:
 
     # region ----- load
     def load_models(self):
-        process_model_config(self.config)
+        load_models_from_config(self.config)
         return None
     # endregion

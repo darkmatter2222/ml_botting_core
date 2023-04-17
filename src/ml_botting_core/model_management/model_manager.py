@@ -1,26 +1,70 @@
 from src.ml_botting_core.model_management.download_models import download_model, sync_model
 from loguru import logger
+import tensorflow as tf
 import json, os
+
+def get_local_file_locations(config_record):
+    meta_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_meta.json"
+    model_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_model.h5"
+    gcp_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_gcp.json"
+
+    meta_file_exist = os.path.isfile(meta_file)
+    model_file_exist = os.path.isfile(model_file)
+    gcp_file_exist = os.path.isfile(gcp_file)
+
+    return meta_file, model_file, gcp_file, meta_file_exist, model_file_exist, gcp_file_exist
 
 def process_model_config(config):
     if 'public_models' in config:
         for config_record in config['public_models']:
             ingest_public_model(config_record)
-            logger.debug(f"processed {config_record['model_name']}")
+            logger.debug(f"PreProcessed public_models {config_record['model_name']}")
             pass
+    # TODO, Build This
     if 'private_models' in config:
         for config_record in config['private_models']:
             ingest_private_model(config_record)
-            logger.debug(f"processed {config_record['model_name']}")
+            logger.debug(f"PreProcessed private_models {config_record['model_name']}")
             pass
 
+def load_models_from_config(config):
+    process_model_config(config)
+
+    if 'public_models' in config:
+        for config_record in config['public_models']:
+            load_model(config_record)
+            logger.debug(f"Loaded {config_record['model_name']}")
+            pass
+    # TODO, Build This
+    if 'private_models' in config:
+        for config_record in config['private_models']:
+            pass
+
+def load_model(config_record):
+    meta_file, model_file, gcp_file, meta_file_exist, model_file_exist, gcp_file_exist = get_local_file_locations(
+        config_record)
+    # TODO, make thi agnostic to model type
+
+    if not meta_file_exist or not model_file_exist or not gcp_file_exist:
+        error = 'Attempted to load models that are not downloaded'
+        logger.error(error)
+        raise Exception(error)
+
+    classifier = {
+        'model': tf.keras.models.load_model(model_file),
+        'meta': json.loads(open(meta_file, 'r').read()),
+        'gcp': json.loads(open(gcp_file, 'r').read()),
+    }
+
+    return classifier
+
+
+
+
+
 def ingest_public_model(config_record):
-    meta_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_meta.json"
-    model_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_model.h5"
-    gcp_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_gcp.json"
-    meta_file_exist = os.path.isfile(meta_file)
-    model_file_exist = os.path.isfile(model_file)
-    gcp_file_exist = os.path.isfile(gcp_file)
+    meta_file, model_file, gcp_file, meta_file_exist, model_file_exist, gcp_file_exist = get_local_file_locations(
+        config_record)
 
     locals_exists = False
     if meta_file_exist and model_file_exist and gcp_file_exist:
@@ -64,4 +108,5 @@ def ingest_public_model(config_record):
     return
 
 def ingest_private_model(config_record):
+    # TODO, Build this
     return
