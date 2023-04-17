@@ -7,4 +7,4 @@ def check_model(config_record):
         pass
     else:
 
-    return
+        return
