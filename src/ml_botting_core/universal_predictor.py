@@ -1,3 +1,6 @@
+from src.ml_botting_core.model_management.download_models import download_model
+from src.ml_botting_core.model_management.check_models import check_model
+
 class universal_predictor:
     def __new__(cls, **args):  # make singleton
         if not hasattr(cls, 'instance'):
@@ -11,9 +14,10 @@ class universal_predictor:
         self.__initialized = True
         self.verbose = verbose
         self.logger = logger
+        self.config = config
 
         # region ----- validation
-        if config is None:
+        if self.config is None:
             error = "universal_predictor missing configuration"
             self.log_error(error)
             raise Exception(error)
@@ -42,4 +46,9 @@ class universal_predictor:
     # endregion
 
     # region ----- load
+    def load_models(self):
+        for record in self.config:
+            check_model(record)
+        return None
+    # endregion
 
