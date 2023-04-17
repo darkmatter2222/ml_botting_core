@@ -15,15 +15,26 @@ def process_model_config(config):
             pass
 
 def ingest_public_model(config_record):
-    meta_file = f"{config_record['model_root_directory']}\\{config_record['game_state']}_meta.json"
-    model_file = f"{config_record['model_root_directory']}\\{config_record['game_state']}_model.h5"
-    gcp_file = f"{config_record['model_root_directory']}\\{config_record['game_state']}_gcp.json"
+    meta_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_meta.json"
+    model_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_model.h5"
+    gcp_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_gcp.json"
 
     locals_exists = False
     if os.path.isfile(meta_file) and os.path.isfile(model_file) and os.path.isfile(gcp_file):
         locals_exists = True
 
     if not locals_exists:
+        if bool(config_record['download_latest']):
+            # compare GCPs and download if needed
+            pass
+        else:
+            # No model exists and we cant download? but we are asking to run this model?
+            error = f"{config_record['model_name']} does not completely exist, not permitted to download fresh copy."
+            error += f" - Meta file exists at '{meta_file}':{os.path.isfile(meta_file)}"
+            error += f" - Model file exists at '{model_file}':{os.path.isfile(model_file)}"
+            error += f" - GCP file exists at '{gcp_file}':{os.path.isfile(gcp_file)}"
+            logger.error(error)
+            raise Exception(error)
         # download everything and finished
         pass
     else:
