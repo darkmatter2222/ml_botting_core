@@ -1,4 +1,4 @@
-from src.ml_botting_core.model_management.download_models import download_model
+from src.ml_botting_core.model_management.download_models import download_model, sync_model
 from loguru import logger
 import json, os
 
@@ -18,21 +18,25 @@ def ingest_public_model(config_record):
     meta_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_meta.json"
     model_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_model.h5"
     gcp_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_gcp.json"
+    meta_file_exist = os.path.isfile(meta_file)
+    model_file_exist = os.path.isfile(model_file)
+    gcp_file_exist = os.path.isfile(gcp_file)
 
     locals_exists = False
-    if os.path.isfile(meta_file) and os.path.isfile(model_file) and os.path.isfile(gcp_file):
+    if meta_file_exist and model_file_exist and gcp_file_exist:
         locals_exists = True
 
     if not locals_exists:
         if bool(config_record['download_latest']):
-            # compare GCPs and download if needed
+            # Download Latest regardless of existence
+            download_model(config_record)
             pass
         else:
             # No model exists and we cant download? but we are asking to run this model?
             error = f"{config_record['model_name']} does not completely exist, not permitted to download fresh copy."
-            error += f" - Meta file exists at '{meta_file}':{os.path.isfile(meta_file)}"
-            error += f" - Model file exists at '{model_file}':{os.path.isfile(model_file)}"
-            error += f" - GCP file exists at '{gcp_file}':{os.path.isfile(gcp_file)}"
+            error += f" - Meta file exists at '{meta_file}':{meta_file_exist}"
+            error += f" - Model file exists at '{model_file}':{model_file_exist}"
+            error += f" - GCP file exists at '{gcp_file}':{gcp_file_exist}"
             logger.error(error)
             raise Exception(error)
         # download everything and finished
@@ -41,6 +45,7 @@ def ingest_public_model(config_record):
         # validate latest and download if allowed
         if bool(config_record['download_latest']):
             # compare GCPs and download if needed
+            sync_model(config_record)
             pass
         else:
             # do nothing, we are done
