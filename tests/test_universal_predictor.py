@@ -14,6 +14,3 @@ def test_missing_config():
         universal_predictor()
     except Exception as e:
         assert e == Exception("universal_predictor missing configuration"), "unexpected exception"
-
-
-test_missing_config()
