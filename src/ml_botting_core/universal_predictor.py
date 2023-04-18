@@ -1,6 +1,9 @@
+import tensorflow as tf
+from loguru import logger
+
 from src.ml_botting_core.model_management.download_models import download_model
 from src.ml_botting_core.model_management.model_manager import load_models_from_config
-from loguru import logger
+
 
 class universal_predictor:
     def __new__(cls, **args):  # make singleton
@@ -15,6 +18,7 @@ class universal_predictor:
         self.__initialized = True
         self.verbose = verbose
         self.config = config
+        self.classifiers = {}
 
         # region ----- validation
         if self.config is None:
@@ -29,6 +33,6 @@ class universal_predictor:
 
     # region ----- load
     def load_models(self):
-        load_models_from_config(self.config)
+        self.classifiers = load_models_from_config(self.config)
         return None
     # endregion

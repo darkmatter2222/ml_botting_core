@@ -1,7 +1,11 @@
-from src.ml_botting_core.model_management.download_models import download_model, sync_model
-from loguru import logger
+import json
+import os
+
 import tensorflow as tf
-import json, os
+from loguru import logger
+
+from src.ml_botting_core.model_management.download_models import download_model, sync_model
+
 
 def get_local_file_locations(config_record):
     meta_file = f"{config_record['model_root_directory']}\\{config_record['model_name']}_meta.json"
@@ -13,6 +17,7 @@ def get_local_file_locations(config_record):
     gcp_file_exist = os.path.isfile(gcp_file)
 
     return meta_file, model_file, gcp_file, meta_file_exist, model_file_exist, gcp_file_exist
+
 
 def process_model_config(config):
     if 'public_models' in config:
@@ -27,18 +32,21 @@ def process_model_config(config):
             logger.debug(f"PreProcessed private_models {config_record['model_name']}")
             pass
 
+
 def load_models_from_config(config):
     process_model_config(config)
-
+    classifiers = {}
     if 'public_models' in config:
         for config_record in config['public_models']:
-            load_model(config_record)
+            classifiers[config_record['model_name']] = load_model(config_record)
             logger.debug(f"Loaded {config_record['model_name']}")
             pass
     # TODO, Build This
     if 'private_models' in config:
         for config_record in config['private_models']:
             pass
+    return classifiers
+
 
 def load_model(config_record):
     meta_file, model_file, gcp_file, meta_file_exist, model_file_exist, gcp_file_exist = get_local_file_locations(
@@ -57,9 +65,6 @@ def load_model(config_record):
     }
 
     return classifier
-
-
-
 
 
 def ingest_public_model(config_record):
@@ -95,8 +100,6 @@ def ingest_public_model(config_record):
             # do nothing, we are done
             pass
 
-
-
     try:
 
         f = open(meta_file, "r")
@@ -106,6 +109,7 @@ def ingest_public_model(config_record):
         logger.info('installed_models file missing, proceeding w/ new.')
         pass
     return
+
 
 def ingest_private_model(config_record):
     # TODO, Build this

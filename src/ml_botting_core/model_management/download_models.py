@@ -1,4 +1,9 @@
-import requests, xmltodict, os, errno, json
+import errno
+import json
+import os
+import requests
+import xmltodict
+from loguru import logger
 
 
 def mkdir_p(path):
@@ -25,6 +30,7 @@ def get_gcp_config(config_record):
         raise Exception("No Models Configured for Download")
 
     return available_models
+
 
 def load_installed_model(config_record):
     f = open(f"{config_record['model_root_directory']}\\{config_record['model_name']}_gcp.json", "r")
