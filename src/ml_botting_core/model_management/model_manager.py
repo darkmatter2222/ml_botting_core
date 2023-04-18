@@ -23,13 +23,13 @@ def process_model_config(config):
     if 'public_models' in config:
         for config_record in config['public_models']:
             ingest_public_model(config_record)
-            logger.debug(f"PreProcessed public_models {config_record['model_name']}")
+            logger.info(f"PreProcessed public_models {config_record['model_name']}")
             pass
     # TODO, Build This
     if 'private_models' in config:
         for config_record in config['private_models']:
             ingest_private_model(config_record)
-            logger.debug(f"PreProcessed private_models {config_record['model_name']}")
+            logger.info(f"PreProcessed private_models {config_record['model_name']}")
             pass
 
 
@@ -39,7 +39,7 @@ def load_models_from_config(config):
     if 'public_models' in config:
         for config_record in config['public_models']:
             classifiers[config_record['model_name']] = load_model(config_record)
-            logger.debug(f"Loaded {config_record['model_name']}")
+            logger.info(f"Loaded {config_record['model_name']}")
             pass
     # TODO, Build This
     if 'private_models' in config:

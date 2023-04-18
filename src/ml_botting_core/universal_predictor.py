@@ -36,3 +36,8 @@ class universal_predictor:
         self.classifiers = load_models_from_config(self.config)
         return None
     # endregion
+
+    # region ----- predict
+    def predict(self, orig_img, clsf_name):
+        return
+    # endregion
