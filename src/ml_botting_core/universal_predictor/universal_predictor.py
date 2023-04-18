@@ -6,7 +6,10 @@ from loguru import logger
 from PIL import Image
 import numpy as np
 
-sys.modules['ml_botting_core'] = sys.modules['src.ml_botting_core']
+try:
+    sys.modules['ml_botting_core'] = sys.modules['src.ml_botting_core']
+except:
+    pass
 
 from ml_botting_core.model_management.model_manager import load_models_from_config
 
