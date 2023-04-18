@@ -1,5 +1,9 @@
+import uuid
+
 import tensorflow as tf
 from loguru import logger
+from PIL import Image
+import numpy as np
 
 from src.ml_botting_core.model_management.download_models import download_model
 from src.ml_botting_core.model_management.model_manager import load_models_from_config
@@ -38,6 +42,31 @@ class universal_predictor:
     # endregion
 
     # region ----- predict
-    def predict(self, orig_img, clsf_name):
-        return
+    def predict(self, original_image, model_name):
+        img = original_image.resize(
+            (self.classifiers[model_name]['meta']['image_resize'][1],
+             self.classifiers[model_name]['meta']['image_resize'][0]),
+            resample=Image.Resampling.NEAREST)
+
+        img_array = tf.keras.utils.img_to_array(img)
+        img_array = tf.expand_dims(img_array, 0)  # Create a batch
+
+        id = uuid.uuid1()
+        if self.classifiers[model_name]['save_images']:
+            img.save(f"{self.config['log_dir']}\\{model_name}\\{id}.png")
+
+        predictions = self.classifiers[model_name]['model'].predict(img_array)
+        scores = tf.nn.softmax(predictions[0])
+        result = {
+            'argmax_index': np.argmax(scores),
+            'value_at_argmax': scores[np.argmax(scores)].numpy(),
+            'class': self.classifiers[model_name]['meta']['classes'][np.argmax(scores)],
+            'classes': self.classifiers[model_name]['meta']['classes'],
+            'scores': scores.numpy().tolist(),
+            'id': id,
+            'image_saved': self.classifiers[model_name]['save_images'],
+            'model_name': model_name
+        }
+
+        return result
     # endregion

@@ -26,6 +26,7 @@ numpy==1.23.5
 oauthlib==3.2.2
 opt-einsum==3.3.0
 packaging==23.1
+Pillow==9.5.0
 pluggy==1.0.0
 protobuf==4.22.3
 pyasn1==0.4.8
