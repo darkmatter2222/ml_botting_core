@@ -1,12 +1,14 @@
 import uuid
+import sys
 
 import tensorflow as tf
 from loguru import logger
 from PIL import Image
 import numpy as np
 
-from src.ml_botting_core.model_management.download_models import download_model
-from src.ml_botting_core.model_management.model_manager import load_models_from_config
+sys.modules['ml_botting_core'] = sys.modules['src.ml_botting_core']
+
+from ml_botting_core.model_management.model_manager import load_models_from_config
 
 
 class universal_predictor:
