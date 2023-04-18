@@ -52,8 +52,9 @@ class universal_predictor:
         img_array = tf.expand_dims(img_array, 0)  # Create a batch
 
         id = uuid.uuid1()
-        if self.classifiers[model_name]['save_images']:
-            img.save(f"{self.config['log_dir']}\\{model_name}\\{id}.png")
+        # TODO, Get back to this
+        #if self.classifiers[model_name]['save_images']:
+            #img.save(f"{self.config['log_dir']}\\{model_name}\\{id}.png")
 
         predictions = self.classifiers[model_name]['model'].predict(img_array)
         scores = tf.nn.softmax(predictions[0])
@@ -64,7 +65,7 @@ class universal_predictor:
             'classes': self.classifiers[model_name]['meta']['classes'],
             'scores': scores.numpy().tolist(),
             'id': id,
-            'image_saved': self.classifiers[model_name]['save_images'],
+            'image_saved': 0,
             'model_name': model_name
         }
 

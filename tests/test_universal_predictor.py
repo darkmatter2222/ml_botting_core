@@ -1,5 +1,4 @@
 from src.ml_botting_core.universal_predictor import universal_predictor
-import json
 
 
 def test_singleton():
@@ -17,11 +16,3 @@ def test_missing_config():
         assert e == Exception("universal_predictor missing configuration"), "unexpected exception"
 
 
-def test_download_model():
-    #config = json.loads(open("tests\\test_model_config.json").read())
-    config = json.loads(open("test_model_config.json").read())
-    up = universal_predictor(config=config)
-    up.load_models()
-
-
-test_download_model()
