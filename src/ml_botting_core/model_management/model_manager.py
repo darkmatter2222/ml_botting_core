@@ -4,7 +4,7 @@ import os
 import tensorflow as tf
 from loguru import logger
 
-from ml_botting_core.model_management.download_models import download_model, sync_model
+from .download_models import download_model, sync_model
 
 
 def get_local_file_locations(config_record):
