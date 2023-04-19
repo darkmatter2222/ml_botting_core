@@ -9,8 +9,29 @@ This package will auto download these models from [Here](https://storage.googlea
 Sample config [Here](https://github.com/darkmatter2222/ml_botting_core/blob/main/samples/sample_config.json) with all models.
 
 # Training
-Train your own models [Here](https://github.com/darkmatter2222/ml_botting_core/blob/main/training/Universal_Classifer_Trainer.ipynb)  
+Train your own models [Here](https://github.com/darkmatter2222/ml_botting_core/blob/main/training/Universal_Classifer_Trainer.ipynb)   
+Sort your training images into folders (images shape must be the same shape) and target the root for training. The classifer will train those image samples to the name of the folder they are in. 
+ - Image names do not matter. 
+ - PNGs only. 
+ - Number of samples per folder do not matter, however you want enough, 80% for training, 20% for validation.  
 
+├── training_data  
+│   ├── char_select  
+│   │   ├── image_1.png  
+│   │   ├── image_2.png  
+│   │   ├── image_3.png  
+│   ├── connection_lost  
+│   │   ├── image_1.png  
+│   │   ├── image_2.png  
+│   │   ├── image_3.png  
+│   ├── in_flight  
+│   │   ├── image_1.png  
+│   │   ├── image_2.png  
+│   │   ├── image_3.png  
+│   ├── in_hanger  
+│   │   ├── image_1.png  
+│   │   ├── image_2.png  
+│   │   ├── image_3.png  
   
 # Usage:
 ### ml_botting_core_config.json
