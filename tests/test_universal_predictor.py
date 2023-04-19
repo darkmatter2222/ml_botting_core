@@ -25,5 +25,3 @@ def test_prediction():
     up.load_models()
     result = up.predict(img, model_name)
     assert result['model_name'] == model_name
-
-test_prediction()
