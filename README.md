@@ -7,6 +7,10 @@
 # Public Eve Online Models  
 This package will auto download these models from [Here](https://storage.googleapis.com/eve_online_models/) at runtime and maintain a copy on your device. (and auto update)  
 Sample config [Here](https://github.com/darkmatter2222/ml_botting_core/blob/main/samples/sample_config.json) with all models.
+
+# Training
+Train your own models [Here](https://github.com/darkmatter2222/ml_botting_core/blob/main/training/Universal_Classifer_Trainer.ipynb)  
+
   
 # Usage:
 ### ml_botting_core_config.json
