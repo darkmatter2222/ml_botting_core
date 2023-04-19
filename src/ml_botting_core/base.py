@@ -1,11 +1,4 @@
-import uuid
-import sys
-
-import tensorflow as tf
 from loguru import logger
-from PIL import Image
-import numpy as np
-
 
 
 from .model_management.model_manager import load_models_from_config
@@ -42,6 +35,7 @@ class universal_predictor:
     def load_models(self):
         self.classifiers = load_models_from_config(self.config)
         return None
+
     # endregion
 
     # region ----- prediction

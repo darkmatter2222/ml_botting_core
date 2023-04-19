@@ -5,14 +5,14 @@
          "model_name":"game_state",
          "download_latest":1,
          "download_latest_from":"https://storage.googleapis.com/eve_online_models/",
-         "model_root_directory":"O:\\eve_live_models\\game_state"
+         "model_root_directory":"tests\\pytest_temp\\game_state"
       }
    ],
    "private_models":[
       {
          "game":"eve_online",
          "model_name":"game_state",
-         "model_root_directory":"O:\\eve_live_models\\game_state"
+         "model_root_directory":"eve_live_models\\pytest_temp\\game_state"
       }
    ]
 }
