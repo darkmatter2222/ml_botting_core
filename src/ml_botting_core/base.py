@@ -29,6 +29,8 @@ class universal_predictor:
 
         self.classifiers = {}
         self.regressors = {}
+
+        self.load_models()
         logger.debug('universal_predictor initialized')
 
     # region ----- load
