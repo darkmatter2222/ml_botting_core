@@ -43,7 +43,9 @@ Sort your training images into folders (images shape must be the same shape) and
          "model_name":"game_state",
          "download_latest":1,
          "download_latest_from":"https://storage.googleapis.com/eve_online_models/",
-         "model_root_directory":"O:\\eve_live_models\\game_state"
+         "model_root_directory":"O:\\eve_live_models\\game_state",
+         "model_log_directory":"O:\\eve_live_logs\\game_state",
+         "save_images":0
       }
    ]
 }
@@ -56,7 +58,6 @@ from ml_botting_core import universal_predictor
 
 up_config = json.load(open(r'ml_botting_core_config.json'))
 up = universal_predictor(config=up_config)
-up.load_models()
 
 img = Image.open('some_image.png')
 state_result = up.predict(img, 'game_state')
@@ -65,24 +66,31 @@ state_result = up.predict(img, 'game_state')
 ### state_result
 ```json
 {
-   "argmax_index":0,
-   "value_at_argmax":0.76277816,
-   "class":"char_select",
+   "epoc_time":"1682138565007.508",
+   "argmax_index":2,
+   "value_at_argmax":"1.0",
+   "class":"jump_though_first",
    "classes":[
-      "char_select",
-      "connection_lost",
-      "in_flight",
-      "in_hanger"
+      "dock_now",
+      "invalid",
+      "jump_though_first",
+      "jump_through_second",
+      "no_action",
+      "warp_to_dock_3",
+      "warp_to_dock_4"
    ],
    "scores":[
-      0.7627781629562378,
-      0.004260888323187828,
-      3.3299270398856606e-06,
-      0.23295757174491882
+      1.2750345662162804e-15,
+      1.4581948495906438e-11,
+      1.0,
+      5.21881417175057e-17,
+      1.4712418422554443e-18,
+      1.2777047215389858e-12,
+      6.730089694497203e-17
    ],
-   "id": UUID("57a29474-de52-11ed-a215-2cf05d9fe8eb"),
+   "id":"98ad373b-e0a6-11ed-9b27-2cf05d9fe8eb",
    "image_saved":0,
-   "model_name":"game_state"
+   "model_name":"nav_options"
 }
 ```
 

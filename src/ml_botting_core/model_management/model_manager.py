@@ -1,10 +1,29 @@
 import json
 import os
+import errno
 
 import tensorflow as tf
 from loguru import logger
 
 from .download_models import download_model, sync_model
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
+
+
+def construct_dirs(config_record):
+    if not os.path.isdir(config_record['model_root_directory']):
+        mkdir_p(config_record['model_root_directory'])
+
+    if not os.path.isdir(config_record['model_log_directory']):
+        mkdir_p(config_record['model_log_directory'])
 
 
 def get_local_file_locations(config_record):
@@ -22,6 +41,7 @@ def get_local_file_locations(config_record):
 def process_model_config(config):
     if 'public_models' in config:
         for config_record in config['public_models']:
+            construct_dirs(config_record)
             ingest_public_model(config_record)
             logger.info(f"PreProcessed public_models {config_record['model_name']}")
             pass
@@ -59,6 +79,7 @@ def load_model(config_record):
         raise Exception(error)
 
     classifier = {
+        'config_record': config_record,
         'model': tf.keras.models.load_model(model_file),
         'meta': json.loads(open(meta_file, 'r').read()),
         'gcp': json.loads(open(gcp_file, 'r').read()),
