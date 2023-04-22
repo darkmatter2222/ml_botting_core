@@ -34,6 +34,8 @@ Sort your training images into folders (images shape must be the same shape) and
 │   │   ├── image_3.png  
   
 # Usage:
+Check out the samples [Here](https://github.com/darkmatter2222/ml_botting_core/tree/main/samples).  
+
 ### ml_botting_core_config.json
 ```json
 {
