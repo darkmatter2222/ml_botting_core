@@ -7,10 +7,11 @@ from PIL import Image, ImageDraw
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 from sklearn.metrics import confusion_matrix
+from sklearn.utils.class_weight import compute_class_weight
 
 def build_and_train(root_image_directory, model_location,
                     model_name, epochs=10,
-                    resize_ratio=0.2):
+                    resize_ratio=0.2, auto_balance_data=True):
     data_dir = pathlib.Path(root_image_directory)
 
     image_list = list(data_dir.glob('*/*.png'))
@@ -40,7 +41,19 @@ def build_and_train(root_image_directory, model_location,
         batch_size=batch_size)
 
     class_names = train_ds.class_names
-    print(class_names)
+    print(f"Class Names: {class_names}")
+
+    class_weights = None
+    if auto_balance_data:
+        y_train = np.concatenate([y for x, y in train_ds], axis=0)
+
+        class_weights = compute_class_weight(class_weight="balanced", classes=np.unique(y_train), y=y_train)
+        class_weights = {i: w for i, w in enumerate(class_weights)}
+
+        print(f"Class Weights: {class_weights}")
+
+
+
 
     AUTOTUNE = tf.data.AUTOTUNE
 
@@ -70,7 +83,8 @@ def build_and_train(root_image_directory, model_location,
     history = model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=epochs
+        epochs=epochs,
+        class_weight=class_weights
     )
     train_data = list(train_ds)
     features = np.concatenate([train_data[n][0] for n in range(0, len(train_data))])
