@@ -7,6 +7,8 @@ import datetime
 import os
 import time
 
+from ..general.general import mkdir_p
+
 
 def write_json(new_data, filename):
     if not os.path.isfile(filename):
@@ -29,7 +31,8 @@ def write_json(new_data, filename):
 
 def save_image(id, original_image, classifier, model_name, result):
     if bool(classifier['config_record']['save_images']):
-        original_image.save(f"{classifier['config_record']['model_log_directory']}\\{id}.png")
+        mkdir_p(f"{classifier['config_record']['model_log_directory']}\\{result['class']}")
+        original_image.save(f"{classifier['config_record']['model_log_directory']}\\{result['class']}\\{id}.png")
         write_json(result, f"{classifier['config_record']['model_log_directory']}\\image_data.json")
 
 
