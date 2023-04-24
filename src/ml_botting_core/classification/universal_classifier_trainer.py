@@ -9,6 +9,7 @@ from tensorflow.keras.models import Sequential
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.class_weight import compute_class_weight
 
+
 def build_and_train(root_image_directory, model_location,
                     model_name, epochs=10,
                     resize_ratio=0.2, auto_balance_data=True):
@@ -52,9 +53,6 @@ def build_and_train(root_image_directory, model_location,
 
         print(f"Class Weights: {class_weights}")
 
-
-
-
     AUTOTUNE = tf.data.AUTOTUNE
 
     train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
@@ -84,25 +82,41 @@ def build_and_train(root_image_directory, model_location,
         train_ds,
         validation_data=val_ds,
         epochs=epochs,
-        class_weight=class_weights
+        class_weight=class_weights,
+        shuffle=True
     )
-    train_data = list(train_ds)
-    features = np.concatenate([train_data[n][0] for n in range(0, len(train_data))])
-    targets = np.concatenate([train_data[n][1] for n in range(0, len(train_data))])
-    print(targets)
-    predictions = model.predict(features)
-    print(predictions.argmax(1))
 
-    cf = confusion_matrix(targets, predictions.argmax(1).astype(int))
+    train_data = list(train_ds)
+    train_features = np.concatenate([train_data[n][0] for n in range(0, len(train_data))])
+    train_targets = np.concatenate([train_data[n][1] for n in range(0, len(train_data))])
+
+    val_data = list(val_ds)
+    val_features = np.concatenate([val_data[n][0] for n in range(0, len(val_data))])
+    val_targets = np.concatenate([val_data[n][1] for n in range(0, len(val_data))])
+
+    train_predictions = model.predict(train_features)
+    val_predictions = model.predict(val_features)
+
+    train_cf = confusion_matrix(train_targets, train_predictions.argmax(1).astype(int))
+    val_cf = confusion_matrix(val_targets, val_predictions.argmax(1).astype(int))
+
+    eval_results = model.evaluate(val_features, val_targets)
+
+    decision_threshold = 0.8
+    if eval_results[1] != 1.0:
+        decision_threshold = 1.0 - ((1.0 - eval_results[1]) * 2)
 
     model.save(model_location)
 
     stats = {
-        'cm': cf
+        'train_cm': train_cf,
+        'val_cm': val_cf,
+        "eval_results": eval_results
     }
     rendering = {
         'image_resize': [img_height, img_width],
-        'classes': class_names
+        'classes': class_names,
+        'decision_threshold': decision_threshold
     }
 
     return stats, rendering
