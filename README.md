@@ -1,3 +1,7 @@
+> **☕ Support my work**
+>
+> If this project has helped you, consider supporting my work on [**Buy Me a Coffee**](https://buymeacoffee.com/j6oiubzfnh).
+
 # Welcome to ML_Botting_Core! 
 **Solving Complex UI Challenges w/ ML**  
 [pip install ml-botting-core](https://pypi.org/project/ml-botting-core/)  
